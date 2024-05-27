@@ -34,10 +34,19 @@ async function logoBuilder() {
     console.log(answers);
     const svgContent = await generateLogo(answers.shape, answers.color, answers.textColor, answers.text);
     console.log('Generated logo.svg successfully!');
-    await writeToSvg(svgContent);
+    await writeToSvg('logo.svg', svgContent);
   } catch(err) {
     console.log(err);
   }
+};
+
+// Creating a function to write the svg content to the logo.svg file
+function writeToSvg(fileName, svgContent) {
+  fs.writeFile(fileName, svgContent, (err) => {
+
+    // Any errors will be logged, otherwise a success message will print to the console.
+    err ? console.error(err) : console.log('SVG file created successfully!')
+  });
 };
 
 // Defining a function to generate the logo
@@ -73,18 +82,6 @@ async function generateLogo(shape, color, textColor, text) {
   }
 
   return svgContent;
-}
-
-// Defining an async function to write the svg content to the logo.svg file
-async function writeToSvg(svgContent) {
-  try {
-    const fileName = 'logo.svg';
-
-    await fs.writeFile(fileName, svgContent);
-    console.log('SVG file created successfully!');
-  } catch(err) {
-    throw new Error('Writing SVG File failed.', err);
-  }
 }
 
 logoBuilder();
